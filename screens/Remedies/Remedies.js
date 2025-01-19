@@ -1,4 +1,11 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
 import React from "react";
 import { moderateScale, verticalScale } from "react-native-size-matters";
 import { useNavigation } from "@react-navigation/native";
@@ -25,7 +32,11 @@ const Remedies = () => {
   return (
     <View>
       <Text style={styles.featureText}>Remedies</Text>
-      <View style={styles.tabsContainer}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.tabsContainer}
+      >
         <TouchableOpacity
           style={styles.GuideTabsoptionButton}
           onPress={handleHungry}
@@ -69,7 +80,7 @@ const Remedies = () => {
           />
           <Text>Burping</Text>
         </TouchableOpacity>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -84,16 +95,17 @@ const styles = StyleSheet.create({
   },
   tabsContainer: {
     flexDirection: "row",
-    flexWrap: "wrap",
-    marginTop: verticalScale(20),
+    alignItems: "center",
+    paddingHorizontal: moderateScale(10),
   },
   GuideTabsoptionButton: {
-    width: "40%",
+    width: moderateScale(90),
     height: moderateScale(90),
-    padding: moderateScale(15),
-    marginBottom: verticalScale(20),
-    marginLeft: moderateScale(22),
+    marginTop: moderateScale(20),
+    marginBottom: moderateScale(20),
+    marginRight: moderateScale(10),
     borderRadius: moderateScale(15),
+    marginLeft: moderateScale(10),
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "#d7e8f4",
