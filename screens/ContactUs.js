@@ -11,7 +11,6 @@ import {
   Platform,
 } from "react-native";
 import React, { useContext, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../context/authContext";
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -46,7 +45,7 @@ const ContactUs = ({ navigation }) => {
     try {
       setLoading(true);
       // Send comment to your backend
-      const response = await axios.post("http://192.168.0.101:8080/comments", {
+      const response = await axios.post(`http://${baseIP}:8080/comments`, {
         name,
         email,
         comment,

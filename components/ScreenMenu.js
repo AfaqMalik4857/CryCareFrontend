@@ -23,6 +23,14 @@ import Recording from "../screens/Recording";
 import SplashScreens from "../screens/SplashScreens";
 import ContactUs from "../screens/ContactUs";
 import Search from "../screens/Search";
+import HealthAndWellness from "../screens/BabyCareGuide/HealthAndWellness";
+import FeedingAndNutrition from "../screens/BabyCareGuide/FeedingAndNutrition";
+import SleepAndComfort from "../screens/BabyCareGuide/SleepAndComfort";
+import ParentingTips from "../screens/BabyCareGuide/ParentingTips";
+import Pain from "../screens/Remedies/Pain";
+import Burping from "../screens/Remedies/Burping";
+import Sleep from "../screens/Remedies/Sleep";
+import Hungry from "../screens/Remedies/Hungry";
 
 const Stack = createNativeStackNavigator();
 
@@ -158,6 +166,46 @@ const ScreenMenu = () => {
       <Stack.Screen
         name="Search"
         component={Search}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="HealthAndWellness"
+        component={HealthAndWellness}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="FeedingAndNutrition"
+        component={FeedingAndNutrition}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="SleepAndComfort"
+        component={SleepAndComfort}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="ParentingTips"
+        component={ParentingTips}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Pain"
+        component={Pain}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Burping"
+        component={Burping}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Sleep"
+        component={Sleep}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Hungry"
+        component={Hungry}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

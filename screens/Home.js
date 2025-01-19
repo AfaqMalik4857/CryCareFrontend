@@ -15,10 +15,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { moderateScale, verticalScale } from "react-native-size-matters";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
-
-// import history from "../assets/use.jpg";
-// import voice from "../assets/voice.jpeg";
-// import use from "../assets/voice.jpeg";
+import BabyCareGuide from "./BabyCareGuide/BabyCareGuide";
+import Remedies from "./Remedies/Remedies";
 
 const Home = () => {
   const navigation = useNavigation();
@@ -123,52 +121,8 @@ const Home = () => {
             }}
           />
         </TouchableOpacity> */}
-        <Text style={styles.featureText}>Baby Care Guides</Text>
-        <View style={styles.tabsContainer}>
-          <TouchableOpacity
-            style={styles.GuideTabsoptionButton}
-            onPress={handleRecording}
-          >
-            <Image
-              source={require("../assets/healthwellness.png")}
-              style={styles.babyGuideLogo}
-            />
-            <Text style={styles.donationText}>Health and Wellness</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.GuideTabsoptionButton}
-            onPress={handleRecording}
-          >
-            <Image
-              source={require("../assets/feedingbaby.png")}
-              style={styles.babyGuideLogo}
-            />
-            <Text style={styles.donationText}>Feeding and Nutrition</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.GuideTabsoptionButton}
-            onPress={handleRecording}
-          >
-            <Image
-              source={require("../assets/sleepingbaby.png")}
-              style={styles.babyGuideLogo}
-            />
-            <Text style={styles.donationText}>Sleep and Comfort</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.GuideTabsoptionButton}
-            onPress={handleRecording}
-          >
-            <Image
-              source={require("../assets/ParentingTips.png")}
-              style={styles.babyGuideLogo}
-            />
-            <Text style={styles.donationText}>Parenting Tips</Text>
-          </TouchableOpacity>
-        </View>
+        <BabyCareGuide />
+        <Remedies />
       </ScrollView>
 
       <View style={styles.footerContainer}>

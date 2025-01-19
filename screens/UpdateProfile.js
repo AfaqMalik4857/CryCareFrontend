@@ -43,10 +43,7 @@ const UpdateProfile = ({ navigation }) => {
       // Log the payload being sent
       console.log(payload);
 
-      const { data } = await axios.put(
-        "http://192.168.0.101:8080/update",
-        payload
-      );
+      const { data } = await axios.put(`http://${baseIP}:8080/update`, payload);
 
       if (data.success) {
         if (isPasswordUpdate) {

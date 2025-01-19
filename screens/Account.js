@@ -28,17 +28,20 @@ const Account = ({ navigation }) => {
   };
 
   const handleUpdateProfile = () => {
-    navigation.navigate("Update Profile");
+    navigation.navigate("UpdateProfile");
   };
   const TermOfUse = () => {
-    navigation.navigate("Term of use");
+    navigation.navigate("TermOfUse");
   };
   const PrivacyPolicy = () => {
-    navigation.navigate("Privacy Policy");
+    navigation.navigate("PrivacyPolicy");
   };
 
   const ContactUs = () => {
-    navigation.navigate("Contact Us");
+    navigation.navigate("ContactUs");
+  };
+  const UserInfo = () => {
+    navigation.navigate("UserInfo");
   };
 
   const About = () => {
@@ -79,10 +82,7 @@ const Account = ({ navigation }) => {
           />
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.updateButton}
-          onPress={() => navigation.navigate("User Info")}
-        >
+        <TouchableOpacity style={styles.updateButton} onPress={UserInfo}>
           <Icon
             name="information-circle-outline"
             size={moderateScale(24)}
@@ -203,7 +203,6 @@ const Account = ({ navigation }) => {
 
       {/* Logout Button */}
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-        <Icon name="log-out-outline" size={moderateScale(24)} color="#fff" />
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
       <View style={styles.version}>
@@ -265,6 +264,7 @@ const styles = StyleSheet.create({
     marginRight: moderateScale(180),
   },
   logoutButton: {
+    width: 130,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

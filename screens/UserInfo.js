@@ -48,9 +48,6 @@ const UserInfo = ({ navigation }) => {
           <Text style={styles.infoText}>Name: {name}</Text>
           <Text style={styles.infoText}>Gender: {gender}</Text>
           <Text style={styles.infoText}>Email: {email}</Text>
-          <Text style={styles.infoText}>
-            Password: {maskedPassword(password)}
-          </Text>
         </View>
       </View>
     </View>
