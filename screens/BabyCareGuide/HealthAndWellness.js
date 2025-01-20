@@ -140,7 +140,7 @@ const HealthAndWellness = ({ navigation }) => {
         ></TouchableOpacity>
         <TouchableOpacity
           style={styles.backToHomeButton}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate("Home")}
         >
           <Text style={styles.backToHomeButtonText}>Back to Home</Text>
         </TouchableOpacity>
