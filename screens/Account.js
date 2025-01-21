@@ -1,3 +1,4 @@
+import React, { useContext, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -6,14 +7,30 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import React, { useContext } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
 import { AuthContext } from "../context/authContext";
 import FooterMenu from "../components/FooterMenu";
 import Icon from "react-native-vector-icons/Ionicons";
 import { moderateScale, verticalScale } from "react-native-size-matters";
 
 const Account = ({ navigation }) => {
-  const [state] = useContext(AuthContext);
+  const [state, setState] = useContext(AuthContext);
+  const [profileImage, setProfileImage] = useState(null);
+
+  // Load the profile image from AsyncStorage
+  useEffect(() => {
+    const loadProfileImage = async () => {
+      const savedImage = await AsyncStorage.getItem("profileImage");
+      if (savedImage) {
+        setProfileImage(savedImage);
+      } else {
+        setProfileImage(require("../assets/profileimage.png"));
+      }
+    };
+
+    loadProfileImage();
+  }, []);
 
   const handleLogout = () => {
     Alert.alert("Logout", "Are you sure you want to logout?", [
@@ -27,197 +44,124 @@ const Account = ({ navigation }) => {
     ]);
   };
 
-  const handleUpdateProfile = () => {
-    navigation.navigate("UpdateProfile");
-  };
-  const TermOfUse = () => {
-    navigation.navigate("TermOfUse");
-  };
-  const PrivacyPolicy = () => {
-    navigation.navigate("PrivacyPolicy");
+  const handleImagePicker = async () => {
+    // Request permission
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert(
+        "Permission required",
+        "Please allow access to your media library to update your profile picture."
+      );
+      return;
+    }
+
+    // Launch image picker
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const newImageUri = result.assets[0].uri;
+      setProfileImage(newImageUri);
+
+      // Save the profile image URI in AsyncStorage
+      await AsyncStorage.setItem("profileImage", newImageUri);
+
+      // Optionally update the user state
+      const updatedUser = { ...state.user, profileImage: newImageUri };
+      setState({ ...state, user: updatedUser });
+
+      console.log("Profile image updated:", newImageUri);
+    }
   };
 
-  const ContactUs = () => {
-    navigation.navigate("ContactUs");
-  };
-  const UserInfo = () => {
-    navigation.navigate("UserInfo");
-  };
-
-  const About = () => {
-    navigation.navigate("About");
+  const navigateTo = (route) => {
+    navigation.navigate(route);
   };
 
   return (
     <View style={styles.container}>
-      <View style={{ alignItems: "center" }}>
-        <Image
-          source={require("../assets/profileimage.png")}
-          style={{
-            height: moderateScale(90),
-            width: moderateScale(90),
-            borderRadius: moderateScale(45),
-            marginTop: verticalScale(50),
-          }}
-        />
-        <Text
-          style={{ marginTop: verticalScale(10), fontSize: moderateScale(25) }}
-        >
-          {state?.user.name}
-        </Text>
+      {/* Header Section */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={handleImagePicker}>
+          <Image
+            source={
+              typeof profileImage === "string"
+                ? { uri: profileImage }
+                : profileImage
+            }
+            style={styles.profileImage}
+          />
+          <View style={styles.cameraIconContainer}>
+            <Icon name="camera-outline" size={moderateScale(20)} color="#fff" />
+          </View>
+        </TouchableOpacity>
+        <Text style={styles.userName}>{state?.user?.name || "User Name"}</Text>
       </View>
 
-      {/* Update Profile Button */}
-      <View style={{ flex: 1, marginTop: verticalScale(45) }}>
-        <TouchableOpacity
-          style={styles.updateButton}
-          onPress={handleUpdateProfile}
-        >
-          <Icon name="create-outline" size={moderateScale(24)} color="black" />
-          <Text style={styles.updateText}>Update Profile</Text>
-          <Icon
-            name="chevron-forward-outline"
-            size={moderateScale(24)}
-            color="black"
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.updateButton} onPress={UserInfo}>
-          <Icon
-            name="information-circle-outline"
-            size={moderateScale(24)}
-            color="black"
-          />
-          <Text
-            style={{
-              marginLeft: moderateScale(8),
-              fontSize: moderateScale(16),
-              color: "black",
-              fontWeight: "bold",
-              marginRight: moderateScale(220),
-            }}
+      {/* Buttons Section */}
+      <View style={styles.buttonsContainer}>
+        {[
+          {
+            icon: "create-outline",
+            label: "Update Profile",
+            route: "UpdateProfile",
+          },
+          {
+            icon: "information-circle-outline",
+            label: "User Info",
+            route: "UserInfo",
+          },
+          {
+            icon: "clipboard-outline",
+            label: "Terms of Use",
+            route: "TermOfUse",
+          },
+          {
+            icon: "lock-closed-outline",
+            label: "Privacy Policy",
+            route: "PrivacyPolicy",
+          },
+          {
+            icon: "information-outline",
+            label: "About",
+            route: "About",
+          },
+          {
+            icon: "person-circle-outline",
+            label: "Contact Us",
+            route: "ContactUs",
+          },
+        ].map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.optionButton}
+            onPress={() => navigateTo(item.route)}
           >
-            User Info
-          </Text>
-          <Icon
-            name="chevron-forward-outline"
-            size={moderateScale(24)}
-            color="black"
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.updateButton} onPress={TermOfUse}>
-          <Icon
-            name="clipboard-outline"
-            size={moderateScale(24)}
-            color="black"
-          />
-          <Text
-            style={{
-              marginLeft: moderateScale(8),
-              fontSize: moderateScale(16),
-              color: "black",
-              fontWeight: "bold",
-              marginRight: moderateScale(187),
-            }}
-          >
-            Terms of Use
-          </Text>
-          <Icon
-            name="chevron-forward-outline"
-            size={moderateScale(24)}
-            color="black"
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.updateButton} onPress={PrivacyPolicy}>
-          <Icon
-            name="lock-closed-outline"
-            size={moderateScale(24)}
-            color="black"
-          />
-          <Text
-            style={{
-              marginLeft: 8,
-              fontSize: moderateScale(16),
-              color: "black",
-              fontWeight: "bold",
-              marginRight: moderateScale(166),
-            }}
-          >
-            Privacy & Policy
-          </Text>
-          <Icon
-            name="chevron-forward-outline"
-            size={moderateScale(24)}
-            color="black"
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.updateButton} onPress={About}>
-          <Icon
-            name="information-outline"
-            size={moderateScale(24)}
-            color="black"
-          />
-          <Text
-            style={{
-              marginLeft: 8,
-              fontSize: moderateScale(16),
-              color: "black",
-              fontWeight: "bold",
-              marginRight: moderateScale(246),
-            }}
-          >
-            About
-          </Text>
-          <Icon
-            name="chevron-forward-outline"
-            size={moderateScale(24)}
-            color="black"
-          />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.contactusButton} onPress={ContactUs}>
-          <Icon
-            name="person-circle-outline"
-            size={moderateScale(24)}
-            color="black"
-          />
-          <Text
-            style={{
-              marginLeft: moderateScale(8),
-              fontSize: moderateScale(16),
-              color: "black",
-              fontWeight: "bold",
-              marginRight: moderateScale(205),
-            }}
-          >
-            Contact Us
-          </Text>
-          <Icon
-            name="chevron-forward-outline"
-            size={moderateScale(24)}
-            color="black"
-          />
-        </TouchableOpacity>
+            <Icon name={item.icon} size={moderateScale(24)} color="#4c8bf5" />
+            <Text style={styles.optionText}>{item.label}</Text>
+            <Icon
+              name="chevron-forward-outline"
+              size={moderateScale(24)}
+              color="#ccc"
+            />
+          </TouchableOpacity>
+        ))}
       </View>
 
       {/* Logout Button */}
       <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>
-      <View style={styles.version}>
-        <Text
-          style={{
-            fontSize: moderateScale(16),
-            color: "black",
-            fontWeight: "bold",
-          }}
-        >
-          Version
-        </Text>
-        <Text style={styles.version}>1.2.1</Text>
-      </View>
 
+      {/* Footer Section */}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Version 1.2.1</Text>
+      </View>
       <FooterMenu />
     </View>
   );
@@ -226,59 +170,79 @@ const Account = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
-    position: "relative",
+    backgroundColor: "#f9f9f9",
   },
-  background: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
-    height: verticalScale(800),
-  },
-  updateButton: {
-    flexDirection: "row",
-    marginLeft: moderateScale(10),
-    marginTop: moderateScale(2),
-    marginBottom: verticalScale(20),
-  },
-  version: {
-    marginLeft: moderateScale(10),
-    marginBottom: verticalScale(20),
+  header: {
     alignItems: "center",
-    alignSelf: "center",
-    textAlign: "center",
-    alignContent: "center",
+    paddingVertical: verticalScale(35),
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
-  contactusButton: {
-    flexDirection: "row",
-    marginLeft: moderateScale(10),
-    marginTop: verticalScale(2),
-    marginBottom: verticalScale(20),
+  profileImage: {
+    width: moderateScale(90),
+    height: moderateScale(90),
+    borderRadius: moderateScale(45),
+    borderWidth: 3,
+    borderColor: "#fff",
   },
-  updateText: {
-    marginLeft: moderateScale(8),
-    fontSize: moderateScale(16),
-    color: "black",
+  cameraIconContainer: {
+    position: "absolute",
+    bottom: 5,
+    right: 5,
+    backgroundColor: "#2c709e",
+    borderRadius: moderateScale(15),
+    padding: 5,
+  },
+  userName: {
+    fontSize: moderateScale(20),
+    color: "#333",
     fontWeight: "bold",
-    marginRight: moderateScale(180),
+    marginTop: verticalScale(10),
+  },
+  buttonsContainer: {
+    marginTop: verticalScale(20),
+    paddingHorizontal: moderateScale(20),
+  },
+  optionButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    padding: moderateScale(15),
+    borderRadius: moderateScale(10),
+    marginBottom: verticalScale(10),
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    elevation: 2,
+  },
+  optionText: {
+    flex: 1,
+    marginLeft: moderateScale(10),
+    fontSize: moderateScale(16),
+    color: "#333",
   },
   logoutButton: {
-    width: 130,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: moderateScale(10),
-    backgroundColor: "#2c709e",
-    borderRadius: moderateScale(25),
+    marginTop: verticalScale(15),
     alignSelf: "center",
-    marginBottom: verticalScale(10),
+    backgroundColor: "#2c709e",
+    paddingVertical: moderateScale(10),
+    paddingHorizontal: moderateScale(20),
+    borderRadius: moderateScale(20),
   },
   logoutText: {
-    marginLeft: moderateScale(8),
     fontSize: moderateScale(16),
     color: "#fff",
     fontWeight: "bold",
+  },
+  footer: {
+    alignItems: "center",
+    paddingVertical: verticalScale(5),
+  },
+  footerText: {
+    marginBottom: moderateScale(12),
+    fontSize: moderateScale(14),
+    color: "#888",
   },
 });
 
