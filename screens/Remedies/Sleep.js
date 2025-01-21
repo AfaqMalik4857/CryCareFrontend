@@ -4,163 +4,143 @@ import {
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
   ScrollView,
+  LayoutAnimation,
+  Platform,
+  UIManager,
+  TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import Icon from "react-native-vector-icons/Ionicons";
-import parentingTipsImage from "../../assets/ParentingTips.png";
+import { Ionicons } from "@expo/vector-icons"; // For arrow icons
+import Sleep from "../../assets/Sleep.png";
+import BackToHome from "../../components/BackToHome";
 
-const Sleep = ({ navigation }) => {
-  const [showTantrums, setShowTantrums] = useState(false);
-  const [showSiblingBonding, setShowSiblingBonding] = useState(false);
-  const [showSelfCare, setShowSelfCare] = useState(false);
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
-  const handleReadMore = (section) => {
-    switch (section) {
-      case "Tantrums":
-        setShowTantrums(!showTantrums);
-        break;
-      case "Sibling Bonding":
-        setShowSiblingBonding(!showSiblingBonding);
-        break;
-      case "Self-Care":
-        setShowSelfCare(!showSelfCare);
-        break;
-      default:
-        break;
+const SleepCry = ({ navigation }) => {
+  const [showIndicators, setShowIndicators] = useState(false);
+  const [showRemedies, setShowRemedies] = useState(false);
+
+  const toggleSection = (section) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    if (section === "indicators") {
+      setShowIndicators(!showIndicators);
+    } else if (section === "remedies") {
+      setShowRemedies(!showRemedies);
     }
   };
 
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={["#d7e8f5", "#d7e8f5", "transparent"]}
+        colors={["#e1eefd", "#f9fcff"]}
         style={styles.background}
       />
       <View style={styles.header}>
-        <View style={{ flexDirection: "row" }}>
-          <Image
-            source={parentingTipsImage}
-            style={{
-              width: 45,
-              height: 50,
-              alignSelf: "flex-start",
-              marginLeft: 5,
-              marginRight: 10,
-            }}
-          />
-          <Text style={styles.title}>Sleep</Text>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Image source={Sleep} style={styles.headerImage} />
         </View>
+        <Text style={styles.title}>Sleep</Text>
         <Text style={styles.subtitle}>
-          Guidance for every stage of parenting
+          Understanding and soothing your baby's sleep cries
         </Text>
       </View>
 
-      <ScrollView style={styles.contentSection}>
-        <View style={styles.contentItem}>
-          <Icon size={24} color="#4c8bf5" />
-          <View style={styles.textContainer}>
-            <Text style={styles.sectionTitle}>Managing Tantrums</Text>
-            <Text style={styles.description}>
-              - Stay calm and avoid yelling.
-            </Text>
-            <Text style={styles.description}>
-              - Distract with toys or activities.
-            </Text>
-            <TouchableOpacity
-              style={styles.readMoreButton}
-              onPress={() => handleReadMore("Tantrums")}
-            >
-              <Text style={styles.readMoreText}>
-                {showTantrums ? "Read Less" : "Read More"}
-              </Text>
-            </TouchableOpacity>
-            {showTantrums && (
-              <View style={styles.expandedContent}>
-                <Text>• Distract with soft toys.</Text>
-                <Text>• Use a calm and soothing voice.</Text>
-                <Text>• Set clear and consistent boundaries.</Text>
-              </View>
-            )}
+      <ScrollView style={styles.content}>
+        {/* Indicators Section */}
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => toggleSection("indicators")}
+        >
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>Indicators</Text>
+            <Ionicons
+              name={showIndicators ? "chevron-up" : "chevron-down"}
+              size={24}
+              color="#032757"
+            />
           </View>
-        </View>
-
-        <View style={styles.contentItem}>
-          <Icon size={24} color="#4c8bf5" />
-          <View style={styles.textContainer}>
-            <Text style={styles.sectionTitle}>Sibling Bonding</Text>
-            <Text style={styles.description}>
-              - Encourage older siblings to help with baby tasks.
-            </Text>
-            <Text style={styles.description}>
-              - Spend one-on-one time with each child.
-            </Text>
-            <TouchableOpacity
-              style={styles.readMoreButton}
-              onPress={() => handleReadMore("Sibling Bonding")}
-            >
-              <Text style={styles.readMoreText}>
-                {showSiblingBonding ? "Read Less" : "Read More"}
+          {showIndicators && (
+            <View style={styles.cardContent}>
+              <Text style={styles.textItem}>
+                • Whining or moaning cries, often escalating if the baby becomes
+                overtired.
               </Text>
-            </TouchableOpacity>
-            {showSiblingBonding && (
-              <View style={styles.expandedContent}>
-                <Text>• Praise positive interactions.</Text>
-                <Text>• Share caregiving tasks with the older child.</Text>
-                <Text>• Ensure equal attention for both siblings.</Text>
-              </View>
-            )}
+              <Text style={styles.textItem}>• Rubbing eyes or yawning.</Text>
+            </View>
+          )}
+        </TouchableOpacity>
+
+        {/* Remedies Section */}
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => toggleSection("remedies")}
+        >
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>Remedies</Text>
+            <Ionicons
+              name={showRemedies ? "chevron-up" : "chevron-down"}
+              size={24}
+              color="#032757"
+            />
           </View>
-        </View>
 
-        <View style={styles.contentItem}>
-          <Icon size={24} color="#4c8bf5" />
-          <View style={styles.textContainer}>
-            <Text style={styles.sectionTitle}>Self-Care for Parents</Text>
-            <Text style={styles.description}>
-              - Rest whenever the baby sleeps.
-            </Text>
-            <Text style={styles.description}>
-              - Share responsibilities with your partner.
-            </Text>
-            <Text style={styles.description}>
-              - Join parenting support groups for advice.
-            </Text>
-            <TouchableOpacity
-              style={styles.readMoreButton}
-              onPress={() => handleReadMore("Self-Care")}
-            >
-              <Text style={styles.readMoreText}>
-                {showSelfCare ? "Read Less" : "Read More"}
-              </Text>
-            </TouchableOpacity>
-            {showSelfCare && (
-              <View style={styles.expandedContent}>
-                <Text>• Find moments for personal relaxation.</Text>
-                <Text>• Ask for help when needed.</Text>
-                <Text>• Prioritize sleep and healthy habits.</Text>
+          {showRemedies && (
+            <View style={styles.cardContent}>
+              <View style={styles.remedyItem}>
+                <Text style={styles.remedyTitle}>
+                  1. Create a Calm Environment:
+                </Text>
+                <Text style={styles.remedyDescription}>
+                  Dim the lights and reduce noise to signal bedtime.
+                </Text>
               </View>
-            )}
-          </View>
-        </View>
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Related Topics:</Text>
-          <TouchableOpacity
-            style={styles.footerLink}
-            onPress={() => navigation.navigate("HealthAndWellness")}
-          >
-            <Text style={styles.footerLinkText}>Health & Wellness</Text>
-          </TouchableOpacity>
+              <View style={styles.remedyItem}>
+                <Text style={styles.remedyTitle}>2. Swaddling:</Text>
+                <Text style={styles.remedyDescription}>
+                  Wrap the baby snugly in a swaddle to mimic the womb’s
+                  security.
+                </Text>
+              </View>
 
-          <TouchableOpacity
-            style={styles.backToHomeButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.backToHomeButtonText}>Back to Home</Text>
-          </TouchableOpacity>
-        </View>
+              <View style={styles.remedyItem}>
+                <Text style={styles.remedyTitle}>
+                  3. Establish a Bedtime Routine:
+                </Text>
+                <Text style={styles.remedyDescription}>
+                  Bath, storytime, or lullabies can help signal it’s time to
+                  sleep.
+                </Text>
+              </View>
+
+              <View style={styles.remedyItem}>
+                <Text style={styles.remedyTitle}>4. Use White Noise:</Text>
+                <Text style={styles.remedyDescription}>
+                  Play calming sounds like a heartbeat or gentle rain to help
+                  the baby settle.
+                </Text>
+              </View>
+
+              <View style={styles.remedyItem}>
+                <Text style={styles.remedyTitle}>
+                  5. Rock or Soothe the Baby:
+                </Text>
+                <Text style={styles.remedyDescription}>
+                  Hold the baby close and gently rock them or pat their back
+                  rhythmically.
+                </Text>
+              </View>
+            </View>
+          )}
+        </TouchableOpacity>
+
+        <BackToHome />
       </ScrollView>
     </View>
   );
@@ -169,9 +149,7 @@ const Sleep = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
-    position: "relative",
-    backgroundColor: "#f4f7fc",
+    backgroundColor: "#f9fcff",
   },
   background: {
     position: "absolute",
@@ -181,96 +159,73 @@ const styles = StyleSheet.create({
     height: 200,
   },
   header: {
-    marginTop: 50,
+    padding: 20,
     alignItems: "center",
   },
+  headerImage: {
+    width: 60,
+    height: 60,
+    marginTop: 10,
+  },
   title: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: "bold",
     color: "#032757",
-    marginTop: 8,
+    marginTop: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: "#032757",
+    color: "#4c4c4c",
+    textAlign: "center",
     marginTop: 5,
   },
-  contentSection: {
+  content: {
     marginTop: 20,
     paddingHorizontal: 20,
   },
-  contentItem: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
+  card: {
+    backgroundColor: "#ffffff",
+    borderRadius: 10,
     padding: 15,
     marginBottom: 15,
-    borderRadius: 10,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 5,
-    elevation: 3,
+    elevation: 5,
   },
-  textContainer: {
-    flex: 1,
-    marginLeft: 10,
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  sectionTitle: {
+  cardTitle: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "600",
     color: "#032757",
   },
-  description: {
-    fontSize: 16,
-    color: "#032757",
-    marginTop: 5,
-  },
-  readMoreButton: {
+  cardContent: {
     marginTop: 10,
-    backgroundColor: "#2c709e",
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    alignItems: "center",
   },
-  readMoreText: {
-    color: "#fff",
-    fontSize: 14,
-  },
-  expandedContent: {
-    marginTop: 10,
-    paddingLeft: 15,
+  textItem: {
     fontSize: 16,
     color: "#032757",
+    marginVertical: 5,
   },
-  footer: {
-    padding: 20,
-    alignItems: "center",
+  remedyItem: {
+    marginBottom: 15,
   },
-  footerText: {
+  remedyTitle: {
     fontSize: 16,
-    color: "#032757",
-    marginBottom: 10,
-  },
-  footerLink: {
-    marginBottom: 10,
-  },
-  footerLinkText: {
-    fontSize: 16,
+    fontWeight: "600",
     color: "#2c709e",
-    textDecorationLine: "underline",
   },
-  backToHomeButton: {
-    marginTop: 10,
-    backgroundColor: "#2c709e",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  backToHomeButtonText: {
-    color: "#fff",
+  remedyDescription: {
     fontSize: 16,
+    color: "#4c5d77",
+    marginLeft: 10,
+    marginTop: 5,
   },
 });
 
-export default Sleep;
+export default SleepCry;

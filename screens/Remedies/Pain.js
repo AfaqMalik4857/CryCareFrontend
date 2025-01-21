@@ -6,167 +6,137 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  LayoutAnimation,
+  Platform,
+  UIManager,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/Ionicons";
-import Pains from "../../assets/Pains.png";
+import BackToHome from "../../components/BackToHome";
 
-const Pain = ({ navigation }) => {
-  const [showBreastfeeding, setShowBreastfeeding] = useState(false);
-  const [showFormulaFeeding, setShowFormulaFeeding] = useState(false);
-  const [showSolids, setShowSolids] = useState(false);
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
-  const handleReadMore = (section) => {
-    switch (section) {
-      case "Breastfeeding":
-        setShowBreastfeeding(!showBreastfeeding);
-        break;
-      case "Formula Feeding":
-        setShowFormulaFeeding(!showFormulaFeeding);
-        break;
-      case "Introducing Solids":
-        setShowSolids(!showSolids);
-        break;
-      default:
-        break;
+const PainCry = ({ navigation }) => {
+  const [showIndicators, setShowIndicators] = useState(false);
+  const [showRemedies, setShowRemedies] = useState(false);
+
+  const toggleSection = (section) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    if (section === "indicators") {
+      setShowIndicators(!showIndicators);
+    } else if (section === "remedies") {
+      setShowRemedies(!showRemedies);
     }
   };
 
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={["#d7e8f5", "#d7e8f5", "transparent"]}
+        colors={["#e1eefd", "#f9fcff"]}
         style={styles.background}
       />
+      {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-        ></TouchableOpacity>
         <View style={{ flexDirection: "row" }}>
-          <Image source={Pains} style={styles.logo} />
-          <Text style={styles.title}>Pain</Text>
+          <Image
+            source={require("../../assets/Pains.png")}
+            style={styles.logo}
+          />
         </View>
-        <Text style={styles.subtitle}>Essential tips to nourish your baby</Text>
+        <Text style={styles.title}>Pain Cry</Text>
+        <Text style={styles.subtitle}>
+          Understand your baby's pain cues and remedies.
+        </Text>
       </View>
 
+      {/* Content */}
       <ScrollView style={styles.contentSection}>
-        <View style={styles.contentItem}>
-          <Icon size={24} color="#4c8bf5" />
-          <View style={styles.textContainer}>
-            <Text style={styles.sectionTitle}>Breastfeeding Tips</Text>
-            <Text style={styles.description}>
-              - Learn about proper latching and positions.
-            </Text>
-            <Text style={styles.description}>
-              - How often to breastfeed your baby.
-            </Text>
-            <TouchableOpacity
-              style={styles.readMoreButton}
-              onPress={() => handleReadMore("Breastfeeding")}
-            >
-              <Text style={styles.readMoreText}>
-                {showBreastfeeding ? "Read Less" : "Read More"}
-              </Text>
-            </TouchableOpacity>
-            {showBreastfeeding && (
-              <View style={styles.expandedContent}>
-                <Text>• Positions:</Text>
-                <Text> - Cradle hold.</Text>
-                <Text> - Football hold.</Text>
-                <Text> - Side-lying position.</Text>
-                <Text>• Tips:</Text>
-                <Text>
-                  {" "}
-                  - Ensure baby latches properly (chin touching breast, lips
-                  flared outward).
-                </Text>
-                <Text> - Breastfeed every 2-3 hours.</Text>
-              </View>
-            )}
+        {/* Indicators */}
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => toggleSection("indicators")}
+        >
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>Indicators</Text>
+            <Icon
+              name={showIndicators ? "chevron-up" : "chevron-down"}
+              size={20}
+              color="#0062cc"
+            />
           </View>
-        </View>
-
-        <View style={styles.contentItem}>
-          <Icon size={24} color="#4c8bf5" />
-          <View style={styles.textContainer}>
-            <Text style={styles.sectionTitle}>Formula Feeding</Text>
-            <Text style={styles.description}>
-              - Safe preparation methods and storage tips.
-            </Text>
-            <Text style={styles.description}>
-              - Feeding schedule for newborns.
-            </Text>
-            <TouchableOpacity
-              style={styles.readMoreButton}
-              onPress={() => handleReadMore("Formula Feeding")}
-            >
-              <Text style={styles.readMoreText}>
-                {showFormulaFeeding ? "Read Less" : "Read More"}
+          {showIndicators && (
+            <View style={styles.cardContent}>
+              <Text style={styles.textItem}>
+                • High-pitched, intense, and sharp crying.
               </Text>
-            </TouchableOpacity>
-            {showFormulaFeeding && (
-              <View style={styles.expandedContent}>
-                <Text>
-                  • Prepare formula as per manufacturer’s instructions.
-                </Text>
-                <Text>• Always discard leftover milk after 1 hour.</Text>
-                <Text>• Use clean and sterilized feeding equipment.</Text>
-              </View>
-            )}
-          </View>
-        </View>
-
-        <View style={styles.contentItem}>
-          <Icon size={24} color="#4c8bf5" />
-          <View style={styles.textContainer}>
-            <Text style={styles.sectionTitle}>
-              Introducing Solids (6+ Months)
-            </Text>
-            <Text style={styles.description}>
-              - Start with single-grain cereals (e.g., rice cereal mixed with
-              breast milk).
-            </Text>
-            <Text style={styles.description}>
-              - Gradually introduce mashed fruits (e.g., banana, apple).
-            </Text>
-            <Text style={styles.description}>
-              - Avoid honey and cow’s milk before 1 year.
-            </Text>
-            <TouchableOpacity
-              style={styles.readMoreButton}
-              onPress={() => handleReadMore("Introducing Solids")}
-            >
-              <Text style={styles.readMoreText}>
-                {showSolids ? "Read Less" : "Read More"}
+              <Text style={styles.textItem}>
+                • Baby might arch their back or pull their legs toward their
+                tummy.
               </Text>
-            </TouchableOpacity>
-            {showSolids && (
-              <View style={styles.expandedContent}>
-                <Text>• Sample Feeding Schedule:</Text>
-                <Text> - Morning: Baby cereal.</Text>
-                <Text> - Noon: Mashed veggies.</Text>
-                <Text> - Evening: Breast milk or formula.</Text>
-              </View>
-            )}
+            </View>
+          )}
+        </TouchableOpacity>
+
+        {/* Remedies */}
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => toggleSection("remedies")}
+        >
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>Remedies</Text>
+            <Icon
+              name={showRemedies ? "chevron-up" : "chevron-down"}
+              size={20}
+              color="#0062cc"
+            />
           </View>
-        </View>
-
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Related Topics:</Text>
-          <TouchableOpacity
-            style={styles.footerLink}
-            onPress={() => navigation.navigate("HealthAndWellness")}
-          >
-            <Text style={styles.footerLinkText}>Health & Wellness</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.backToHomeButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.backToHomeButtonText}>Back to Home</Text>
-          </TouchableOpacity>
-        </View>
+          {showRemedies && (
+            <View style={styles.cardContent}>
+              <Text style={styles.textItem}>
+                1. Identify the Source of Pain:
+              </Text>
+              <Text style={styles.subItem}>
+                • Check for tight clothing, diaper rashes, or skin irritation.
+              </Text>
+              <Text style={styles.subItem}>
+                • Look for signs of teething (red gums, drooling).
+              </Text>
+              <Text style={styles.textItem}>2. Soothing Techniques:</Text>
+              <Text style={styles.subItem}>
+                • Gently massage the baby’s tummy if they seem gassy.
+              </Text>
+              <Text style={styles.subItem}>
+                • Use a cool teething ring for gum pain.
+              </Text>
+              <Text style={styles.textItem}>
+                3. Adjust the Baby’s Position:
+              </Text>
+              <Text style={styles.subItem}>
+                • Hold the baby upright or in a comfortable position to reduce
+                discomfort.
+              </Text>
+              <Text style={styles.textItem}>4. Check Temperature:</Text>
+              <Text style={styles.subItem}>
+                • Ensure the baby isn’t too hot or cold. Adjust clothing and
+                room temperature as needed.
+              </Text>
+              <Text style={styles.textItem}>
+                5. Use Doctor-Approved Medication:
+              </Text>
+              <Text style={styles.subItem}>
+                • For teething or mild discomfort, consult a pediatrician for
+                safe pain relief options (e.g., teething gels, baby
+                acetaminophen).
+              </Text>
+            </View>
+          )}
+        </TouchableOpacity>
+        <BackToHome />
       </ScrollView>
     </View>
   );
@@ -175,15 +145,7 @@ const Pain = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
-    position: "relative",
-    backgroundColor: "#f4f7fc",
-  },
-  logo: {
-    width: 45,
-    height: 50,
-    alignSelf: "flex-start",
-    marginLeft: 5,
+    backgroundColor: "#f9fcff",
   },
   background: {
     position: "absolute",
@@ -193,27 +155,38 @@ const styles = StyleSheet.create({
     height: 200,
   },
   header: {
-    marginTop: 50,
+    padding: 40,
     alignItems: "center",
   },
+  backButton: {
+    position: "absolute",
+
+    top: 50,
+  },
+  backIcon: {
+    color: "#032757",
+  },
+  logo: {
+    width: 60,
+    height: 60,
+    marginRight: 10,
+  },
   title: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: "bold",
     color: "#032757",
-    marginTop: 8,
+    marginTop: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: "#032757",
+    color: "#4c4c4c",
     marginTop: 5,
   },
   contentSection: {
-    marginTop: 20,
-    paddingHorizontal: 20,
+    margin: 20,
   },
-  contentItem: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
+  card: {
+    backgroundColor: "#ffffff",
     padding: 15,
     marginBottom: 15,
     borderRadius: 10,
@@ -223,66 +196,29 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 3,
   },
-  textContainer: {
-    flex: 1,
-    marginLeft: 10,
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  sectionTitle: {
+  cardTitle: {
     fontSize: 18,
     fontWeight: "bold",
     color: "#032757",
   },
-  description: {
+  cardContent: {
+    marginTop: 10,
+  },
+  textItem: {
     fontSize: 16,
     color: "#032757",
-    marginTop: 5,
+    marginVertical: 5,
   },
-  readMoreButton: {
-    marginTop: 10,
-    backgroundColor: "#2c709e",
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  readMoreText: {
-    color: "#fff",
+  subItem: {
     fontSize: 14,
-  },
-  expandedContent: {
-    marginTop: 10,
-    paddingLeft: 15,
-    fontSize: 16,
-    color: "#032757",
-  },
-  footer: {
-    padding: 20,
-    alignItems: "center",
-  },
-  footerText: {
-    fontSize: 16,
-    color: "#032757",
-    marginBottom: 10,
-  },
-  footerLink: {
-    marginBottom: 10,
-  },
-  footerLinkText: {
-    fontSize: 16,
-    color: "#2c709e",
-    textDecorationLine: "underline",
-  },
-  backToHomeButton: {
-    marginTop: 10,
-    backgroundColor: "#2c709e",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  backToHomeButtonText: {
-    color: "#fff",
-    fontSize: 16,
+    color: "#4c4c4c",
+    marginLeft: 10,
   },
 });
 
-export default Pain;
+export default PainCry;

@@ -64,7 +64,7 @@ const Remedies = () => {
           onPress={handleSleep}
         >
           <Image
-            source={require("../../assets/sleepingbaby.png")}
+            source={require("../../assets/Sleep.png")}
             style={styles.babyGuideLogo}
           />
           <Text>Sleep</Text>
@@ -75,8 +75,12 @@ const Remedies = () => {
           onPress={handleBurping}
         >
           <Image
-            source={require("../../assets/ParentingTips.png")}
-            style={styles.babyGuideLogo}
+            source={require("../../assets/burping.png")}
+            style={{
+              width: moderateScale(40),
+              height: moderateScale(40),
+              marginBottom: verticalScale(8),
+            }}
           />
           <Text>Burping</Text>
         </TouchableOpacity>

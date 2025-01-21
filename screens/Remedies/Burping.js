@@ -4,143 +4,170 @@ import {
   Text,
   StyleSheet,
   Image,
-  TouchableOpacity,
   ScrollView,
+  TouchableOpacity,
+  LayoutAnimation,
+  Platform,
+  UIManager,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import Icon from "react-native-vector-icons/Ionicons";
+import { Ionicons } from "@expo/vector-icons";
+import BackToHome from "../../components/BackToHome";
 
-const Burping = ({ navigation }) => {
-  const [showSleepTraining, setShowSleepTraining] = useState(false);
-  const [showComfortTechniques, setShowComfortTechniques] = useState(false);
-  const [showSleepSafety, setShowSleepSafety] = useState(false);
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
+
+const Burping = () => {
+  const [showIndicators, setShowIndicators] = useState(false);
+  const [showRemedies, setShowRemedies] = useState(false);
+
+  const toggleSection = (section) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    if (section === "indicators") {
+      setShowIndicators(!showIndicators);
+    } else if (section === "remedies") {
+      setShowRemedies(!showRemedies);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={["#d7e8f5", "#d7e8f5", "transparent"]}
+        colors={["#e1eefd", "#f9fcff"]}
         style={styles.background}
       />
       <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-        ></TouchableOpacity>
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Image
-            source={require("../../assets/sleepingbaby.png")}
-            style={styles.logo}
+            source={require("../../assets/burping.png")}
+            style={styles.headerImage}
           />
-          <Text style={styles.title}>Burping</Text>
         </View>
+        <Text style={styles.title}>Burping</Text>
         <Text style={styles.subtitle}>
-          Essential tips for your baby's sleep
+          Understanding and soothing your baby's burping cries
         </Text>
       </View>
 
-      <ScrollView style={styles.contentSection}>
-        <View style={styles.contentItem}>
-          <Icon size={24} color="#4c8bf5" />
-          <View style={styles.textContainer}>
-            <Text style={styles.sectionTitle}>Sleep Training</Text>
-            <Text style={styles.description}>
-              - Tips for getting your baby to sleep on a schedule.
-            </Text>
-            <TouchableOpacity
-              style={styles.readMoreButton}
-              onPress={() => setShowSleepTraining(!showSleepTraining)}
-            >
-              <Text style={styles.readMoreText}>
-                {showSleepTraining ? "Show Less" : "Read More"}
-              </Text>
-            </TouchableOpacity>
-            {showSleepTraining && (
-              <View style={styles.details}>
-                <Text>
-                  • Create a bedtime routine: Bath, storytime, lullabies.
-                </Text>
-                <Text>• Gradually reduce night feeding.</Text>
-                <Text>• Use a consistent sleep schedule.</Text>
-              </View>
-            )}
+      <ScrollView style={styles.content}>
+        {/* Indicators Section */}
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => toggleSection("indicators")}
+        >
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>Indicators</Text>
+            <Ionicons
+              name={showIndicators ? "chevron-up" : "chevron-down"}
+              size={24}
+              color="#032757"
+            />
           </View>
-        </View>
-
-        <View style={styles.contentItem}>
-          <Icon size={24} color="#4c8bf5" />
-          <View style={styles.textContainer}>
-            <Text style={styles.sectionTitle}>Comfort Techniques</Text>
-            <Text style={styles.description}>
-              - Techniques to comfort your baby and promote relaxation.
-            </Text>
-            <TouchableOpacity
-              style={styles.readMoreButton}
-              onPress={() => setShowComfortTechniques(!showComfortTechniques)}
-            >
-              <Text style={styles.readMoreText}>
-                {showComfortTechniques ? "Show Less" : "Read More"}
+          {showIndicators && (
+            <View style={styles.cardContent}>
+              <Text style={styles.textItem}>
+                • Short, repetitive cries that start after feeding.
               </Text>
-            </TouchableOpacity>
-            {showComfortTechniques && (
-              <View style={styles.details}>
-                <Text>• Swaddling: Wrap baby snugly but not too tight.</Text>
-                <Text>
-                  • White Noise: Mimics sounds from the womb, calms baby.
-                </Text>
-                <Text>• Recognizing Sleep Cues:</Text>
-                <Text style={styles.subSectionTitle}>o Rubbing eyes.</Text>
-                <Text style={styles.subSectionTitle}>o Reduced activity.</Text>
-                <Text style={styles.subSectionTitle}>o Yawning.</Text>
-              </View>
-            )}
-          </View>
-        </View>
-
-        <View style={styles.contentItem}>
-          <Icon size={24} color="#4c8bf5" />
-          <View style={styles.textContainer}>
-            <Text style={styles.sectionTitle}>Sleep Safety</Text>
-            <Text style={styles.description}>
-              - Ensure a safe sleep environment for your baby.
-            </Text>
-            <TouchableOpacity
-              style={styles.readMoreButton}
-              onPress={() => setShowSleepSafety(!showSleepSafety)}
-            >
-              <Text style={styles.readMoreText}>
-                {showSleepSafety ? "Show Less" : "Read More"}
+              <Text style={styles.textItem}>
+                • Baby appears restless, arches their back, or pulls their legs
+                up.
               </Text>
-            </TouchableOpacity>
-            {showSleepSafety && (
-              <View style={styles.details}>
-                <Text>• Always place baby on their back to sleep.</Text>
-                <Text>
-                  • Use a firm mattress with no loose bedding or toys.
-                </Text>
-                <Text>• Room temperature should be between 68-72°F.</Text>
-              </View>
-            )}
-          </View>
-        </View>
+              <Text style={styles.textItem}>
+                • Signs of discomfort (e.g., clenched fists, bloated tummy).
+              </Text>
+            </View>
+          )}
+        </TouchableOpacity>
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Related Topics:</Text>
-          <TouchableOpacity
-            style={styles.footerLink}
-            onPress={() => navigation.navigate("HealthAndWellness")}
-          >
-            <Text style={styles.footerLinkText}>Health & Wellness</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.footerLink}
-            onPress={() => console.log("Milestones clicked")}
-          ></TouchableOpacity>
-          <TouchableOpacity
-            style={styles.backToHomeButton}
-            onPress={() => navigation.goBack()}
-          >
-            <Text style={styles.backToHomeButtonText}>Back to Home</Text>
-          </TouchableOpacity>
-        </View>
+        {/* Remedies Section */}
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => toggleSection("remedies")}
+        >
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>Remedies</Text>
+            <Ionicons
+              name={showRemedies ? "chevron-up" : "chevron-down"}
+              size={24}
+              color="#032757"
+            />
+          </View>
+
+          {showRemedies && (
+            <View style={styles.cardContent}>
+              <View style={styles.remedyItem}>
+                <Text style={styles.remedyTitle}>1. Burp the Baby:</Text>
+                <Text style={styles.remedyDescription}>
+                  o Hold the baby upright over your shoulder and gently pat or
+                  rub their back to release trapped gas.
+                </Text>
+                <Text style={styles.remedyDescription}>
+                  o Alternative position: Sit the baby on your lap, support
+                  their chest and head, and pat their back.
+                </Text>
+              </View>
+
+              <View style={styles.remedyItem}>
+                <Text style={styles.remedyTitle}>
+                  2. Change Feeding Position:
+                </Text>
+                <Text style={styles.remedyDescription}>
+                  o Feed the baby in a more upright position to minimize air
+                  intake.
+                </Text>
+              </View>
+
+              <View style={styles.remedyItem}>
+                <Text style={styles.remedyTitle}>
+                  3. Use Anti-Colic Bottles:
+                </Text>
+                <Text style={styles.remedyDescription}>
+                  o These bottles are designed to reduce the amount of air
+                  swallowed during feeding.
+                </Text>
+              </View>
+
+              <View style={styles.remedyItem}>
+                <Text style={styles.remedyTitle}>
+                  4. Frequent Burping During Feeding:
+                </Text>
+                <Text style={styles.remedyDescription}>
+                  o Burp the baby midway through the feeding session, especially
+                  if they’re bottle-fed.
+                </Text>
+              </View>
+
+              <View style={styles.remedyItem}>
+                <Text style={styles.remedyTitle}>5. Gentle Tummy Time:</Text>
+                <Text style={styles.remedyDescription}>
+                  o After feeding, place the baby on their tummy for a few
+                  minutes (supervised) to help release gas.
+                </Text>
+              </View>
+
+              <View style={styles.remedyItem}>
+                <Text style={styles.remedyTitle}>6. Avoid Overfeeding:</Text>
+                <Text style={styles.remedyDescription}>
+                  o Ensure you’re feeding the baby appropriate portions to
+                  prevent discomfort.
+                </Text>
+              </View>
+
+              <View style={styles.remedyItem}>
+                <Text style={styles.remedyTitle}>7. Massage the Tummy:</Text>
+                <Text style={styles.remedyDescription}>
+                  o Use gentle, clockwise motions to help ease any gas buildup.
+                </Text>
+              </View>
+            </View>
+          )}
+        </TouchableOpacity>
+
+        <BackToHome />
       </ScrollView>
     </View>
   );
@@ -149,9 +176,7 @@ const Burping = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
-    position: "relative",
-    backgroundColor: "#f4f7fc",
+    backgroundColor: "#f9fcff",
   },
   background: {
     position: "absolute",
@@ -160,104 +185,73 @@ const styles = StyleSheet.create({
     top: 0,
     height: 200,
   },
-  logo: {
-    width: 50,
-    height: 53,
-    alignSelf: "flex-start",
-    marginLeft: 5,
-    marginRight: 10,
-  },
   header: {
-    marginTop: 50,
+    padding: 20,
     alignItems: "center",
   },
+  headerImage: {
+    width: 60,
+    height: 60,
+    marginTop: 10,
+  },
   title: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: "bold",
     color: "#032757",
-    marginTop: 8,
+    marginTop: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: "#032757",
+    color: "#4c4c4c",
+    textAlign: "center",
     marginTop: 5,
   },
-  contentSection: {
+  content: {
     marginTop: 20,
     paddingHorizontal: 20,
   },
-  contentItem: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
+  card: {
+    backgroundColor: "#ffffff",
+    borderRadius: 10,
     padding: 15,
     marginBottom: 15,
-    borderRadius: 10,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 5,
-    elevation: 3,
+    elevation: 5,
   },
-  textContainer: {
-    flex: 1,
-    marginLeft: 10,
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  sectionTitle: {
+  cardTitle: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: "600",
     color: "#032757",
   },
-  description: {
+  cardContent: {
+    marginTop: 10,
+  },
+  textItem: {
     fontSize: 16,
     color: "#032757",
-    marginTop: 5,
+    marginVertical: 5,
   },
-  readMoreButton: {
-    marginTop: 10,
-    backgroundColor: "#2c709e",
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    alignItems: "center",
+  remedyItem: {
+    marginBottom: 15,
   },
-  readMoreText: {
-    color: "#fff",
-    fontSize: 14,
-  },
-  details: {
-    marginTop: 10,
-  },
-  subSectionTitle: {
-    fontWeight: "bold",
-    marginTop: 10,
-  },
-  footer: {
-    padding: 20,
-    alignItems: "center",
-  },
-  footerText: {
+  remedyTitle: {
     fontSize: 16,
-    color: "#032757",
-    marginBottom: 10,
-  },
-  footerLink: {
-    marginBottom: 10,
-  },
-  footerLinkText: {
-    fontSize: 16,
+    fontWeight: "600",
     color: "#2c709e",
-    textDecorationLine: "underline",
   },
-  backToHomeButton: {
-    marginTop: 10,
-    backgroundColor: "#2c709e",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  backToHomeButtonText: {
-    color: "#fff",
+  remedyDescription: {
     fontSize: 16,
+    color: "#4c5d77",
+    marginLeft: 10,
+    marginTop: 5,
   },
 });
 

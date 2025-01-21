@@ -6,145 +6,136 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  LayoutAnimation,
+  Platform,
+  UIManager,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/Ionicons";
+import BackToHome from "../../components/BackToHome";
+
+if (
+  Platform.OS === "android" &&
+  UIManager.setLayoutAnimationEnabledExperimental
+) {
+  UIManager.setLayoutAnimationEnabledExperimental(true);
+}
 
 const Hungry = ({ navigation }) => {
-  const [showVaccination, setShowVaccination] = useState(false);
-  const [showFever, setShowFever] = useState(false);
-  const [showHygiene, setShowHygiene] = useState(false);
+  const [showIndicators, setShowIndicators] = useState(false);
+  const [showRemedies, setShowRemedies] = useState(false);
+
+  const toggleSection = (section) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    if (section === "indicators") {
+      setShowIndicators(!showIndicators);
+    } else if (section === "remedies") {
+      setShowRemedies(!showRemedies);
+    }
+  };
 
   return (
     <View style={styles.container}>
       <LinearGradient
-        colors={["#d7e8f5", "#d7e8f5", "transparent"]}
+        colors={["#e1eefd", "#f9fcff"]}
         style={styles.background}
       />
+      {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() => navigation.goBack()}
-        ></TouchableOpacity>
-        <View style={{ flexDirection: "row" }}>
-          <Image
-            source={require("../../assets/HungryBaby.png")}
-            style={styles.logo}
-          />
-          <Text style={styles.title}>Hungry</Text>
-        </View>
-        <Text style={styles.subtitle}>Essential care tips for your baby</Text>
+          style={styles.backButton}
+        >
+          <Icon name="arrow-back" size={28} style={styles.backIcon} />
+        </TouchableOpacity> */}
+        <Image
+          source={require("../../assets/HungryBaby.png")}
+          style={styles.logo}
+        />
+        <Text style={styles.title}>Hunger Cry</Text>
+        <Text style={styles.subtitle}>
+          Understand your baby's hunger cues and remedies.
+        </Text>
       </View>
 
+      {/* Content */}
       <ScrollView style={styles.contentSection}>
-        <View style={styles.contentItem}>
-          <Icon size={24} color="#4c8bf5" />
-          <View style={styles.textContainer}>
-            <Text style={styles.sectionTitle}>Vaccination Schedules</Text>
-            <Text style={styles.description}>
-              - Learn about recommended vaccines for your baby.
-            </Text>
-            <TouchableOpacity
-              style={styles.readMoreButton}
-              onPress={() => setShowVaccination(!showVaccination)}
-            >
-              <Text style={styles.readMoreText}>
-                {showVaccination ? "Show Less" : "Read More"}
-              </Text>
-            </TouchableOpacity>
-            {showVaccination && (
-              <View style={styles.details}>
-                <Text>• 0-2 Months: BCG, Hepatitis B, Polio.</Text>
-                <Text>• 2-4 Months: DTP, Hib, Rotavirus.</Text>
-                <Text>• 6 Months: Influenza, Hepatitis B booster.</Text>
-                <Text>• 12 Months: MMR, Varicella, Hepatitis A.</Text>
-                <Text>• 18 Months: DTP booster, IPV, MMR booster.</Text>
-              </View>
-            )}
+        {/* Indicators Section */}
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => toggleSection("indicators")}
+        >
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>Indicators</Text>
+            <Icon
+              name={
+                showIndicators ? "chevron-up-outline" : "chevron-down-outline"
+              }
+              size={20}
+              color="#0062cc"
+            />
           </View>
-        </View>
+          {showIndicators && (
+            <View style={styles.cardContent}>
+              <Text style={styles.textItem}>
+                • Rooting (turning head toward objects near their mouth).
+              </Text>
+              <Text style={styles.textItem}>
+                • Sucking on hands or fingers.
+              </Text>
+              <Text style={styles.textItem}>
+                • Short, low-pitched repetitive cries.
+              </Text>
+            </View>
+          )}
+        </TouchableOpacity>
 
-        <View style={styles.contentItem}>
-          <Icon size={24} color="#4c8bf5" />
-          <View style={styles.textContainer}>
-            <Text style={styles.sectionTitle}>Managing Fever</Text>
-            <Text style={styles.description}>
-              - How to manage fever in your baby.
-            </Text>
-            <TouchableOpacity
-              style={styles.readMoreButton}
-              onPress={() => setShowFever(!showFever)}
-            >
-              <Text style={styles.readMoreText}>
-                {showFever ? "Show Less" : "Read More"}
-              </Text>
-            </TouchableOpacity>
-            {showFever && (
-              <View style={styles.details}>
-                <Text style={styles.subSectionTitle}>Symptoms:</Text>
-                <Text>• High temperature, irritability, poor feeding.</Text>
-                <Text style={styles.subSectionTitle}>Home Care:</Text>
-                <Text>• Dress baby in light clothing.</Text>
-                <Text>• Use lukewarm sponge baths.</Text>
-                <Text>
-                  • Administer acetaminophen (as per doctor’s advice).
-                </Text>
-                <Text style={styles.subSectionTitle}>
-                  When to Consult a Doctor:
-                </Text>
-                <Text>• Fever lasts more than 3 days.</Text>
-                <Text>• Baby under 3 months with a high fever.</Text>
-              </View>
-            )}
+        {/* Remedies Section */}
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => toggleSection("remedies")}
+        >
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>Remedies</Text>
+            <Icon
+              name={
+                showRemedies ? "chevron-up-outline" : "chevron-down-outline"
+              }
+              size={20}
+              color="#0062cc"
+            />
           </View>
-        </View>
-
-        <View style={styles.contentItem}>
-          <Icon size={24} color="#4c8bf5" />
-          <View style={styles.textContainer}>
-            <Text style={styles.sectionTitle}>Hygiene</Text>
-            <Text style={styles.description}>
-              - Basic hygiene practices for your baby.
-            </Text>
-            <TouchableOpacity
-              style={styles.readMoreButton}
-              onPress={() => setShowHygiene(!showHygiene)}
-            >
-              <Text style={styles.readMoreText}>
-                {showHygiene ? "Show Less" : "Read More"}
+          {showRemedies && (
+            <View style={styles.cardContent}>
+              <Text style={styles.textItem}>1. Feed the Baby:</Text>
+              <Text style={styles.subItem}>
+                • Offer breast milk or formula as per the baby’s feeding
+                schedule.
               </Text>
-            </TouchableOpacity>
-            {showHygiene && (
-              <View style={styles.details}>
-                <Text>• Sterilize bottles and pacifiers after every use.</Text>
-                <Text style={styles.subSectionTitle}>Bathing Tips:</Text>
-                <Text>• Use lukewarm water.</Text>
-                <Text>• Clean creases and folds gently.</Text>
-                <Text>• Pat dry thoroughly to prevent rashes.</Text>
-              </View>
-            )}
-          </View>
-        </View>
+              <Text style={styles.subItem}>
+                • Ensure proper latch for effective breastfeeding.
+              </Text>
+              <Text style={styles.textItem}>2. Burp the Baby:</Text>
+              <Text style={styles.subItem}>
+                • Hold upright and gently pat/rub their back to release gas.
+              </Text>
+              <Text style={styles.textItem}>3. Check Feeding Gaps:</Text>
+              <Text style={styles.subItem}>
+                • Ensure feeding every 2-3 hours for newborns.
+              </Text>
+              <Text style={styles.textItem}>4. Warm Milk for Comfort:</Text>
+              <Text style={styles.subItem}>
+                • Ensure formula/stored milk is comfortably warm.
+              </Text>
+              <Text style={styles.textItem}>5. Offer a Pacifier:</Text>
+              <Text style={styles.subItem}>
+                • Sucking for comfort can help soothe crying.
+              </Text>
+            </View>
+          )}
+        </TouchableOpacity>
+        <BackToHome />
       </ScrollView>
-
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>Related Topics:</Text>
-        <TouchableOpacity
-          style={styles.footerLink}
-          onPress={() => navigation.navigate("FeedingAndNutrition")}
-        >
-          <Text style={styles.footerLinkText}>Feeding & Nutrition</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.footerLink}
-          onPress={() => console.log("Milestones clicked")}
-        ></TouchableOpacity>
-        <TouchableOpacity
-          style={styles.backToHomeButton}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.backToHomeButtonText}>Back to Home</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
@@ -152,9 +143,7 @@ const Hungry = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "space-between",
-    position: "relative",
-    backgroundColor: "#f4f7fc",
+    backgroundColor: "#f9fcff",
   },
   background: {
     position: "absolute",
@@ -163,112 +152,86 @@ const styles = StyleSheet.create({
     top: 0,
     height: 200,
   },
-  logo: {
-    width: 45,
-    height: 50,
-    alignSelf: "flex-start",
-    marginLeft: 5,
-    marginRight: 10,
-    marginTop: 3,
-  },
   header: {
-    marginTop: 50,
+    padding: 20,
     alignItems: "center",
+  },
+  backButton: {
+    position: "absolute",
+    left: 15,
+    top: 50,
   },
   backIcon: {
     color: "#032757",
-    fontSize: 28,
-    position: "absolute",
-    left: 15,
-    top: 10,
+  },
+  logo: {
+    width: 60,
+    height: 60,
+    marginTop: 10,
   },
   title: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: "bold",
     color: "#032757",
-    marginTop: 8,
+    marginTop: 10,
   },
   subtitle: {
     fontSize: 16,
-    color: "#032757",
+    color: "#4c4c4c",
+    textAlign: "center",
     marginTop: 5,
   },
   contentSection: {
-    marginTop: 20,
-    paddingHorizontal: 20,
+    margin: 20,
   },
-  contentItem: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
+  card: {
+    backgroundColor: "#ffffff",
+    borderRadius: 10,
     padding: 15,
     marginBottom: 15,
-    borderRadius: 10,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 5,
-    elevation: 3,
+    elevation: 5,
   },
-  textContainer: {
-    flex: 1,
+  cardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#032757",
+  },
+  cardContent: {
+    marginTop: 10,
+  },
+  textItem: {
+    fontSize: 16,
+    color: "#032757",
+    marginVertical: 5,
+  },
+  subItem: {
+    fontSize: 14,
+    color: "#4c4c4c",
     marginLeft: 10,
   },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#032757",
-  },
-  description: {
-    fontSize: 16,
-    color: "#032757",
-    marginTop: 5,
-  },
-  readMoreButton: {
-    marginTop: 10,
-    backgroundColor: "#2c709e",
-    paddingVertical: 8,
-    paddingHorizontal: 15,
-    borderRadius: 5,
-    alignItems: "center",
-  },
-  readMoreText: {
-    color: "#fff",
-    fontSize: 14,
-  },
-  details: {
-    marginTop: 10,
-  },
-  subSectionTitle: {
-    fontWeight: "bold",
-    marginTop: 10,
-  },
   footer: {
-    padding: 20,
     alignItems: "center",
+    padding: 5,
   },
-  footerText: {
-    fontSize: 16,
-    color: "#032757",
-    marginBottom: 10,
-  },
-  footerLink: {
-    marginBottom: 10,
-  },
-  footerLinkText: {
-    fontSize: 16,
-    color: "#2c709e",
-    textDecorationLine: "underline",
-  },
-  backToHomeButton: {
-    marginTop: 10,
+  actionButton: {
     backgroundColor: "#2c709e",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
+    paddingVertical: 12,
+    paddingHorizontal: 30,
+    borderRadius: 20,
   },
-  backToHomeButtonText: {
-    color: "#fff",
+  actionButtonText: {
     fontSize: 16,
+    color: "#ffffff",
+    fontWeight: "600",
   },
 });
 
