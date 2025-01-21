@@ -10,6 +10,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/Ionicons";
 import feedingbaby from "../../assets/feedingbaby.png";
+import BackToHome from "../../components/BackToHome";
 
 const FeedingAndNutrition = ({ navigation }) => {
   const [showBreastfeeding, setShowBreastfeeding] = useState(false);
@@ -160,12 +161,7 @@ const FeedingAndNutrition = ({ navigation }) => {
             <Text style={styles.footerLinkText}>Health & Wellness</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.backToHomeButton}
-            onPress={() => navigation.navigate("Home")}
-          >
-            <Text style={styles.backToHomeButtonText}>Back to Home</Text>
-          </TouchableOpacity>
+          <BackToHome />
         </View>
       </ScrollView>
     </View>
@@ -271,17 +267,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#2c709e",
     textDecorationLine: "underline",
-  },
-  backToHomeButton: {
-    marginTop: 10,
-    backgroundColor: "#2c709e",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  backToHomeButtonText: {
-    color: "#fff",
-    fontSize: 16,
   },
 });
 

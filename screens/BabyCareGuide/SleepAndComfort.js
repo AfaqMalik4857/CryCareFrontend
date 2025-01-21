@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Icon from "react-native-vector-icons/Ionicons";
+import BackToHome from "../../components/BackToHome";
 
 const SleepAndComfort = ({ navigation }) => {
   const [showSleepTraining, setShowSleepTraining] = useState(false);
@@ -134,12 +135,7 @@ const SleepAndComfort = ({ navigation }) => {
             style={styles.footerLink}
             onPress={() => console.log("Milestones clicked")}
           ></TouchableOpacity>
-          <TouchableOpacity
-            style={styles.backToHomeButton}
-            onPress={() => navigation.navigate("Home")}
-          >
-            <Text style={styles.backToHomeButtonText}>Back to Home</Text>
-          </TouchableOpacity>
+          <BackToHome />
         </View>
       </ScrollView>
     </View>
@@ -247,17 +243,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#2c709e",
     textDecorationLine: "underline",
-  },
-  backToHomeButton: {
-    marginTop: 10,
-    backgroundColor: "#2c709e",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  backToHomeButtonText: {
-    color: "#fff",
-    fontSize: 16,
   },
 });
 
