@@ -31,6 +31,7 @@ import Pain from "../screens/Remedies/Pain";
 import Burping from "../screens/Remedies/Burping";
 import Sleep from "../screens/Remedies/Sleep";
 import Hungry from "../screens/Remedies/Hungry";
+import HistoryDetail from "../screens/HistoryDetail";
 
 const Stack = createNativeStackNavigator();
 
@@ -120,6 +121,11 @@ const ScreenMenu = () => {
       <Stack.Screen
         name="History"
         component={History}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="HistoryDetail"
+        component={HistoryDetail}
         options={{ headerShown: false }}
       />
       <Stack.Screen
