@@ -19,14 +19,14 @@ const Search = ({ navigation }) => {
   const searchInputRef = useRef(null);
 
   const popularSearches = [
-    "Update Profile",
+    "UpdateProfile",
     "History",
     "About",
     "Account",
-    "User Info",
-    "Term of Use",
-    "Privacy Policy",
-    "Contact Us",
+    "UserInfo",
+    "TermOfUse",
+    "PrivacyPolicy",
+    "ContactUs",
     "Chat",
     "Recording",
   ];
