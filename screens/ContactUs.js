@@ -71,19 +71,16 @@ const ContactUs = ({ navigation }) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
       <LinearGradient
-        colors={["#d7e8f5", "#d7e8f5", "transparent"]}
+        colors={["#d7e8f5", "#f2f8fc", "transparent"]}
         style={styles.background}
       />
-      <View style={{ flexDirection: "row" }}>
-        <TouchableOpacity
-          style={{
-            marginLeft: moderateScale(20),
-            marginTop: verticalScale(65),
-          }}
+      <View style={styles.header}>
+        {/* <TouchableOpacity
+          style={styles.backButtonContainer}
           onPress={() => navigation.navigate("Account")}
         >
-          <Icon name="arrow-back-outline" size={28} color="black" />
-        </TouchableOpacity>
+          <Icon name="arrow-back-outline" size={28} color="#fff" />
+        </TouchableOpacity> */}
 
         <Image
           source={require("../assets/crycarelogo.png")}
@@ -92,10 +89,10 @@ const ContactUs = ({ navigation }) => {
       </View>
 
       <ScrollView style={{ flex: 1 }} keyboardShouldPersistTaps="handled">
-        <View style={{ alignItems: "baseline" }}>
+        <View style={styles.titleContainer}>
           <Text style={styles.title}>Contact Us</Text>
           <Text style={styles.subtitle}>
-            If you have any questions or queries, you can contact us.
+            If you have any questions or queries, feel free to contact us.
           </Text>
         </View>
 
@@ -121,23 +118,27 @@ const ContactUs = ({ navigation }) => {
             onChangeText={setComment}
           />
         </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
+        <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.SubmitButton}
             onPress={() => navigation.navigate("Account")}
             disabled={loading}
           >
             <Icon name="arrow-back-outline" size={24} color="#fff" />
-            <Text style={styles.backButton}>Back</Text>
+            <Text style={styles.backButtonText}>Back</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={styles.SubmitButton}
+            style={[styles.SubmitButton, styles.submitButton]}
             onPress={handleSubmit}
             disabled={loading}
           >
-            <Text style={styles.SubmitText}>
-              {loading ? "Submitting..." : "Submit"}
-            </Text>
+            {loading ? (
+              <Icon name="reload-circle-outline" size={24} color="#fff" />
+            ) : (
+              <Text style={styles.SubmitText}>
+                {loading ? "Submitting..." : "Submit"}
+              </Text>
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -156,25 +157,51 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    height: moderateScale(200),
+    height: "100%",
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: moderateScale(20),
+    marginTop: verticalScale(50),
+  },
+  backButtonContainer: {
+    padding: moderateScale(10),
+    backgroundColor: "#2c709e",
+    borderRadius: moderateScale(30),
   },
   logo: {
-    width: moderateScale(200),
-    height: moderateScale(53),
-    alignSelf: "flex-start",
+    width: moderateScale(150),
+    height: moderateScale(40),
+    marginLeft: moderateScale(70),
+  },
+  titleContainer: {
+    alignItems: "flex-start",
+    marginLeft: moderateScale(20),
     marginTop: verticalScale(50),
-    marginLeft: moderateScale(10),
+  },
+  title: {
+    fontSize: moderateScale(28),
+    fontWeight: "bold",
+  },
+  subtitle: {
+    marginTop: verticalScale(5),
+    fontSize: moderateScale(16),
+    marginRight: moderateScale(5),
+    color: "gray",
   },
   inputContainer: {
     marginTop: verticalScale(20),
+    paddingHorizontal: moderateScale(15),
   },
   input: {
-    height: moderateScale(40),
+    height: moderateScale(45),
     borderColor: "#ccc",
-    borderRadius: scale(5),
+    borderWidth: 1,
+    borderRadius: scale(10),
     paddingHorizontal: moderateScale(10),
     marginBottom: verticalScale(15),
-    margin: moderateScale(12),
     backgroundColor: "#fff",
     fontWeight: "bold",
   },
@@ -182,38 +209,34 @@ const styles = StyleSheet.create({
     height: verticalScale(100),
     textAlignVertical: "top",
   },
-  title: {
-    marginTop: verticalScale(60),
-    marginBottom: verticalScale(5),
-    fontSize: moderateScale(25),
-    marginLeft: moderateScale(10),
-  },
-  subtitle: {
-    marginTop: verticalScale(5),
-    marginBottom: verticalScale(15),
-    fontSize: moderateScale(15),
-    color: "gray",
-    margin: moderateScale(10),
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: moderateScale(20),
+    marginTop: verticalScale(40),
   },
   SubmitButton: {
     flexDirection: "row",
-    padding: 10,
+    paddingVertical: moderateScale(10),
+    paddingHorizontal: moderateScale(25),
     backgroundColor: "#2c709e",
     borderRadius: moderateScale(25),
-    marginTop: verticalScale(60),
-    alignSelf: "center",
+    alignItems: "center",
+    justifyContent: "center",
   },
   SubmitText: {
     fontSize: moderateScale(16),
     color: "#fff",
     fontWeight: "bold",
   },
-  backButton: {
+  backButtonText: {
     fontSize: moderateScale(16),
     color: "#fff",
     fontWeight: "bold",
-    width: moderateScale(50),
-    textAlign: "center",
+    marginLeft: moderateScale(5),
+  },
+  submitButton: {
+    marginLeft: moderateScale(20),
   },
 });
 
