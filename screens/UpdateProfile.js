@@ -177,7 +177,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: moderateScale(24),
     fontWeight: "bold",
-    color: "#2c709e",
   },
   subtitle: {
     fontSize: moderateScale(14),
