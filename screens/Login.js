@@ -27,7 +27,7 @@ const Login = ({ navigation }) => {
     try {
       setLoading(true);
       if (!email || !password) {
-        Alert.alert("Please Fill All Fields");
+        Alert.alert("Required", "Please Fill All Fields");
         setLoading(false);
         return;
       }
